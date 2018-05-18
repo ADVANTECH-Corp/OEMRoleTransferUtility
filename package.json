@@ -1,0 +1,38 @@
+{
+  "name": "oem-role-transfer-utility",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build_win32": "electron-packager . oem-role-transfer-utility --platform=win32 --arch=all --version=1.8.2 --asar=true --ignore=node_modules/electron-* "
+  },
+  "repository": "https://github.com/electron/oem-role-transfer-utility",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "~1.8.2",
+    "electron-packager": "^12.0.2"
+  },
+  "dependencies": {
+    "Buffer": "0.0.0",
+    "binstring": "^0.2.1",
+    "child_process": "^1.0.2",
+    "dialog": "^0.3.1",
+    "dotenv": "^5.0.1",
+    "fs": "0.0.1-security",
+    "fs-extra": "^6.0.0",
+    "gm": "^1.23.1",
+    "hex-to-binary": "^1.0.1",
+    "mbed-cloud-sdk": "^1.2.8",
+    "node-notifier": "^5.2.1",
+    "string-builder": "^0.1.4"
+  }
+}

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>OEM Role Transfer Utility</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/about.css" />
+  <link rel="stylesheet" href="css/readme.css" />
+  <link rel="stylesheet" href="css/configure.css" />
+
+  <script src="scripts/about.js"></script>
+  <script src="scripts/configure.js"></script>
+  <script src="scripts/readme.js"></script>
+  <script src="node_modules/mbed-cloud-sdk/bundles/connect.min.js"></script>
+  <script src="node_modules/mbed-cloud-sdk/bundles/device-directory.min.js"></script>
+  <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+  <script src="jQuery/jquery-3.3.1.min.js"></script>
+  <script src="jQuery/jquery.blockUI.js"></script>
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+    crossorigin="anonymous">
+  <script>if (window.module) { module = window.module; }</script>
+  <script>
+
+    var MbedCloudSDK = require('mbed-cloud-sdk');
+    var fs = require('fs');
+    var fs = require('fs-extra');
+    var gm = require('gm');
+    var path = require("path");
+    var dialog = require('dialog');
+    var StringBuilder = require('string-builder');
+    var execSync = require('child_process').execSync;
+
+    var DELAY = 500;
+    var Current_Category = null;
+    var Is_Nodes_Loaded = false;
+    var strAPIKey;
+    var connectApi;
+    var deviceDirectoryApi;
+    var readme = true;
+
+    var IDS_towrite = "";
+    var manufacturer = "";
+    var modelNumber = "";
+    var devicetype = "";
+    var enable_claim = "";
+    var minfwversion = "";
+
+    var MBED_CLOUD_DEVICE_SERVER_API = "https://api.us-east-1.mbedcloud.com";
+
+    //function categories
+    CATEGORIES = {
+      "README": "category-readme"
+      , "CONFIGURE": "category-configure"
+      , "ABOUT": "category-about"
+    }
+
+    function navigate_to(category, init_func) {
+      if (Current_Category === category) {
+        return;  // return if same page
+      }
+
+      if (!(category in CATEGORIES)) {
+        console.error("unknown category: " + category);
+        return;
+      }
+
+      // block_window(null, category);
+      setTimeout(() => {
+        $("#" + CATEGORIES[Current_Category]).hide(); // hide current page
+
+        Current_Category = category;
+        Is_Nodes_Loaded = false;
+        if (init_func) {
+          init_func();
+        }
+
+        $("#" + CATEGORIES[Current_Category]).show(); // show selected page
+        // unblock_window(category);
+      }, DELAY);
+    }
+
+    navigate_to("ABOUT", init_about);
+
+
+
+
+  </script>
+</head>
+
+<body>
+  <!-- begin of function menu -->
+  <ul class="nav">
+    <li onclick="navigate_to('README', init_readme)">
+      <i class="fa fa-file-alt" style="font-size:24px;"></i>
+      <div>ReadMe</div>
+    </li>
+
+    <li onclick="navigate_to('CONFIGURE', init_configure)">
+      <i class="fa fa-cloud-upload-alt" style="font-size:22px;"></i>
+      <div>Configure</div>
+    </li>
+
+    <li style="margin-top:400px;" onclick="navigate_to('ABOUT', init_about)">
+      <i class="fa fa-info" style="font-size:22px;"></i>
+      <div>About</div>
+    </li>
+  </ul>
+  <!-- End of fuction menu -->
+
+  <!-- function pages -->
+
+  <div id="category-readme" style="display:none; margin-left: 45px;">
+    <div id="next" alt="Next" title="Next">
+      <div class="arrow-right"></div>
+    </div>
+    <div id="prev" alt="Prev" title="Prev">
+      <div class="arrow-left"></div>
+    </div>
+
+    <!--div id="slider">
+    <img id="steps" src="./imgs/step1.jpg"  />
+    </div> -->
+    <div id="slider">
+
+      <div class="slide">
+        <div class="img1"></div>
+        <div class="slide-copy">
+          <h2 class="readme">1. Go to Mbed Cloud Portal</h2>
+          <p>URL: <a  target="_blank" href="https://portal.mbedcloud.com/">https://portal.mbedcloud.com/</a>
+            <br>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="img2"></div>
+        <div class="slide-copy">
+          <h2 class="readme">2. Create API Key in Mbed Cloud</h2>
+          <p> Go to Mbed Cloud Portal<br>
+             URL:<a  target="_blank" href="https://portal.mbedcloud.com/access/keys"> https://portal.mbedcloud.com/access/keys </a>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="img3"></div>
+        <div class="slide-copy">
+          <h2 class="readme">3. Create API key</h2>
+          <p>Enter API key name and click [Create API key].
+            <br>
+          </p>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="img4"></div>
+        <div class="slide-copy">
+          <h2 class="readme">4. Copy API key</h2>
+          <p>This key is only available once, so please be sure to copy it.
+            <br>
+          </p>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="img5"></div>
+        <div class="slide-copy">
+          <h2 class="readme">5. Go to [Configure] page on OEM Role Transfer Tool </h2>
+          <p>Click on [Configure] button on left menu.
+            <br>
+          </p>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="img6"></div>
+        <div class="slide-copy">
+          <h2 class="readme">6. Enter API key </h2>
+          <p>Use API key copied from Step 4 and click [Submit].
+            <br> All registered devices corresponding to the Mbed Cloud account <br>
+            associated with the API key will be listed.
+            </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="img7"></div>
+        <div class="slide-copy">
+          <h2 class="readme">7. Select Devices and Complete Form</h2>
+          <p>Notice: SW Manufacturer <a style="font-weight: bolder; color:coral;">OR</a> SW Model number <a style="font-weight: bolder; color:coral;">MUST</a> be different from last update.
+            <br>
+          </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="img8"></div>
+        <div class="slide-copy">
+          <h2 class="readme">8. Configuration Complete </h2>
+          <p>After clicking [Apply], update procedure will begin.
+            <br> </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="img9"></div>
+        <div class="slide-copy">
+          <h2 class="readme">9. Check Device Console </h2>
+          <p>Configuration in progress.
+            <br> </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="update"></div>
+        <div class="slide-copy">
+          <h2 class="readme">10. Check Device Console </h2>
+          <p>Configuration in progress.
+            <br> </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="update1"></div>
+        <div class="slide-copy">
+          <h2 class="readme">11. Check Settings on Mbed Cloud </h2>
+          <p>Go to [Device directory] on Mbed Cloud Portal.<br>
+             URL:<a  target="_blank" href="https://portal.mbedcloud.com/devices/list">https://portal.mbedcloud.com/devices/list </a>
+          </p>
+        </div>
+      </div>
+
+      <div class="slide">
+        <div class="update2"></div>
+        <div class="slide-copy">
+          <h2 class="readme">12. Check Settings on Mbed Cloud </h2>
+          <p>Click on device and select [About this devices] tab.
+            <br> Ensure the information has been updated correctly.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="update3"></div>
+        <div class="slide-copy">
+          <h2 class="readme">13. Check Settings on Mbed Cloud </h2>
+          <p>Click on [Live Resources].
+            <br> Ensure information has been updated.
+            <br> Device bootstraps and is ready for Firmware updates.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="update4"></div>
+        <div class="slide-copy">
+          <h2 class="readme">14. Update firmware your devices </h2>
+          <p>Go to [Firmware update] on Mbed Cloud Portal.<br>
+              URL:<a  target="_blank" href="https://portal.mbedcloud.com/firmware"> https://portal.mbedcloud.com/firmware</a>
+              <br>   Follow information on Mbed Cloud Documentation for more details.<br>
+              URL:<a  target="_blank" href=" https://cloud.mbed.com/docs/current/introduction/update.html"> https://cloud.mbed.com/docs/current/introduction/update.html</a>
+              
+          </p>
+        </div>
+
+      </div>
+
+      <div class="slide">
+        <div class="start"></div>
+        <div class="slide-copy">
+          <h2 class="readme">Get Started...</h2>
+          <p>
+            <br> </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <div id="category-configure" style="display:none; margin-left: 63px; overflow:hidden">
+    <div class="textBox">
+      <input id="inputKey" class="text" type="text" contenteditable="true" placeholder="Please key in your API KEY & Submit" onkeyup="this.setAttribute('value', this.value);"
+        value="" />
+      <label class="label">YOUR API KEY</label>
+
+      <p>
+        <input type="submit" class="submit" onclick="return submit()" value="Submit" />
+      </p>
+    </div>
+    <div id=list>
+      <div class="update-title" style="margin-top: 15px;font-size: 13pt;">DEVICE LIST
+        <!-- <span style="color: #778899; font-size: 12px; font-weight: lighter; display:inline;">Registered Devices will be listed below.</span> -->
+      </div>
+      <div id="devicediv" class="devicelist" style="overflow: auto;" data-placeholder="Registered devices will be listed below.">
+        <!-- <span style="color: #778899; font-size: 12px; font-weight: lighter; display:inline;">Registered Devices will be listed below.</span> -->
+        <!-- <h2 id="devicediv"></h2> -->
+      </div>
+    </div>
+    <!-- <hr class=hr> -->
+    <div class="update-title" style="margin-top: 10px; font-size: 13pt;"> METADATA </div>
+    <table class="details" id="details">
+      <thead>
+        <tr>
+          <th>URI</th>
+          <th>Description</th>
+          <th>Payload</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>/30000/0/1</td>
+          <td>SW Manufacturer</td>
+          <td>
+            <input class="cat_textbox" type="text" name="manufacturer" id="manufacturer" placeholder="SW Vendor Name 2" maxlength="64"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>/30000/0/2</td>
+          <td>SW Model Number</td>
+          <td>
+            <input class="cat_textbox" type="text" name="modelNumber" id="modelNumber" placeholder="SW Vendor Model Number 2" maxlength="64"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>/30000/0/3</td>
+          <td>SW Device Type</td>
+          <td>
+            <input class="cat_textbox" type="text" name="devicetype" id="devicetype" placeholder="SW Vendor Device Type 2" maxlength="64"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>/30000/0/4</td>
+          <td>Vendor ID</td>
+          <td>
+            <input class="cat_textbox" type="text" name="vendorid" id="vendorid" placeholder="Be03fa58231c52578b64ef86804f4e6e" maxlength="32"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>/30000/0/5</td>
+          <td>Class ID</td>
+          <td>
+            <input class="cat_textbox" type="text" name="classid" id="classid" placeholder="d3faccb4a047575992e133488a7d2cc1" maxlength="32"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>/30000/0/6</td>
+          <td>UPDATE_AUTH_CERT</td>
+          <td>
+            <input class="cat_textbox" name="file" class="fields" id="select-file" type="file" required>
+          </td>
+        </tr>
+        <tr>
+          <td>/30000/0/7</td>
+          <td>Enable OEM Role Claim</td>
+          <td>
+            <input class="cat_textbox" type="text" id="enable_claim" name="enable_claim" placeholder="1" maxlength="1" />
+          </td>
+
+        </tr>
+        <tr>
+          <td>/30000/0/8</td>
+          <td>MinFWVersionMonotonicCounter</td>
+          <td>
+            <input class="cat_textbox" type="text" id="minfwversion" name="minfwversion" placeholder="0" maxlength="10" />
+
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+    <div class="apply">
+      <input id="apply" class="cat_button" type="submit" value="Apply" onclick="return apply()" />
+    </div>
+  </div>
+
+
+
+  <div id="category-about" style="display:none;">
+    <div id="advantech-logo"></div>
+    <table id="about-info"></table>
+    <hr class="horizontal" />
+    <div id="copyright">Copyright &copy; 2018 EIoT, Advantech Co., Ltd, All Rights Reserved</div>
+  </div>
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+  </script>
+</body>
+
+</html>

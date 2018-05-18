@@ -1,0 +1,40 @@
+#category-about {
+    position: absolute;
+    top:90px;
+    text-align: center;
+    left: 95px;
+    width: 650px;
+    height: 420px;
+}
+#copyright {
+    margin-top: 5px;
+    font-size: 15px;
+    left: 75px;
+    position: absolute;
+}
+#about-info {
+    margin-top: 50px;
+    /* margin-left: 73px; */
+    width: 530px;
+}
+hr.horizontal {
+    border: 0;
+    height: 2px;
+    background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+    margin-top: 10px;
+    margin-left: 40px;
+    width: 580px;
+}
+#about-info tr {
+    height: 35px;
+}
+#about-info td {
+    font-size: 18px;
+}
+#advantech-logo {
+    margin: 10px auto;
+    width: 500px;
+    height: 140px;
+    background: url(../imgs/advantech.png) no-repeat;
+    background-size: 100%;
+}
