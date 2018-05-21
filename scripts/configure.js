@@ -29,15 +29,7 @@ function myExecSync(cmd) {
     $("#select-file").val('');
     $("#enable_claim").val('');
     $("#minfwversion").val('');
-    // output.stdout.on('data', function (data) {
-    //     console.log('stdout: ' + data);
-    // });
-    // output.stderr.on('data', function (data) {
-    //     console.log('stdout: ' + data);
-    // });
-    // output.on('close', function (code) {
-    //     console.log('closing code: ' + code);
-    // });
+    
 }
 
 function apply() {
@@ -85,7 +77,7 @@ function apply() {
 
     fs.writeFileSync('mbed-cloud-sdk-javascript-example-oem-role-claim/.env', sb.toString())
 
-    console.log('Saved!');
+    console.log('.env Saved!');
 
     var selectfile_path = document.getElementById("select-file").files[0].path;
     try {
@@ -100,7 +92,7 @@ function apply() {
     for (var p = 0; p < vendorid.length; p++) {
         vendorid[p] = parseInt(vendorid_input.substring(2 * p, 2 * p + 2), 16);
     }
-    console.log(vendorid);
+    // console.log(vendorid);
 
     fs.writeFileSync('mbed-cloud-sdk-javascript-example-oem-role-claim/SW-Vendor/SWV_VendorId.bin', vendorid);
 
@@ -110,7 +102,7 @@ function apply() {
     for (var q = 0; q < classid.length; q++) {
         classid[q] = parseInt(classid_input.substring(2 * q, 2 * q + 2), 16);
     }
-    console.log(classid);
+    // console.log(classid);
 
     fs.writeFileSync('mbed-cloud-sdk-javascript-example-oem-role-claim/SW-Vendor/SWV_ClassId.bin', classid);
 
