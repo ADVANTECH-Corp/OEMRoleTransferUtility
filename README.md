@@ -1,21 +1,21 @@
 ## Before you start
 
-1. Ensure devices are connected to your Mbed Cloud acount by following the steps in [First-to-Claim by enrollment list](https://cloud.mbed.com/docs/current/connecting/device-ownership.html)
-2. Please read [Arm Mbed Cloud Update client](https://cloud.mbed.com/docs/current/updating-firmware/client-side.html) to create authenticity certificate required later on
+* Ensure devices are connected to your Mbed Cloud acount by following the steps in [First-to-Claim by enrollment list](https://cloud.mbed.com/docs/current/connecting/device-ownership.html)
+* Please read [Arm Mbed Cloud Update client](https://cloud.mbed.com/docs/current/updating-firmware/client-side.html) to create authenticity certificate required later on.
 
 
-### Prerequisites
-OS: Windows ONLY
-Node.js: Version 6 or above.
+## Prerequisites
+* OS: Windows ONLY
+* Node.js: Version 6 or above.
 
 
-### Installation
+## Installation
 Open a command prompt (Cmd. exe), navigate to the location of your folder.
-Execute the tool by running command
-# npm start
+Execute the tool by running command:
+    npm start
 
 
-### Using the Tool
+## Using the Tool
 
 The following fields are required: 
 
@@ -28,7 +28,7 @@ The following fields are required:
 
 * SW Manufacturer = Fill in name of your Company
 * SW Model number = Fill in name of your Company
-##SW Manufacturer OR SW Model number MUST be different from last update.##
+*SW Manufacturer OR SW Model number MUST be different from last update*
 
 * SW Device type = Gateway
 * Enable OEM Role Claim = True  (stay unlocked) /False (lock)
