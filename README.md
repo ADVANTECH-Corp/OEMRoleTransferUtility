@@ -1,3 +1,4 @@
+
 ## Before you start
 
 * Ensure devices are connected to your Mbed Cloud acount by following the steps in [First-to-Claim by enrollment list](https://cloud.mbed.com/docs/current/connecting/device-ownership.html)
@@ -12,7 +13,7 @@
 ## Installation
 Open a command prompt (Cmd. exe), navigate to the location of your folder.
 Execute the tool by running command:
-    npm start
+<pre>npm start</pre>
 
 
 ## Using the Tool
@@ -27,7 +28,8 @@ The following fields are required:
    If there’s no registered devices, please check the network connection of devices.
 
 * SW Manufacturer = Fill in name of your Company
-* SW Model number = Fill in name of your Company
+* SW Model number = Fill in name of your Company 
+ 
 *SW Manufacturer OR SW Model number MUST be different from last update*
 
 * SW Device type = Gateway
